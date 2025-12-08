@@ -12,13 +12,25 @@ def read_file(file_path):
 	with open(file_path, "r") as file:
 		return file.read()
 
-
+prompt=read_file("context.txt")
 
 def ask_LLM(chat_history):
 	client = Groq(api_key=os.environ["GROQ_KEY"])
 
 	stream_response = client.chat.completions.create(
-	    messages=chat_history,
+	    messages=
+		[
+       
+        {
+            "role": "system",
+            "content": prompt
+            },
+        # Set a user message for the assistant to respond to.
+        {
+            "role": "user",
+            "content": chat_history,
+        }
+    ],
 	    stream=True,
 	    model=MODEL
 	)
@@ -32,5 +44,5 @@ def read_stream_response(stream_response):
 
 
 if __name__ == "__main__":
-	stream_response = ask_LLM(question="donne moi une blague sur les poules")
+	stream_response = ask_LLM(chat_history="donne moi une blague sur les poules")
 	read_stream_response(stream_response)
