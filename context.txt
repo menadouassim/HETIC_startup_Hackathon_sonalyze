@@ -1,1 +1,1 @@
-#insert here the logic behind the prompt
+you are a powerful assistant
