@@ -14,6 +14,12 @@ def read_file(file_path):
 
 prompt=read_file("context.txt")
 
+json_file=read_file("test_data_n1.json")
+
+#Function to interact with the LLM
+
+###### replace with json file transfer ######
+
 def ask_LLM(chat_history):
 	client = Groq(api_key=os.environ["GROQ_KEY"])
 
@@ -44,5 +50,5 @@ def read_stream_response(stream_response):
 
 
 if __name__ == "__main__":
-	stream_response = ask_LLM(chat_history="donne moi une blague sur les poules")
+	stream_response = ask_LLM(chat_history=json_file)
 	read_stream_response(stream_response)
