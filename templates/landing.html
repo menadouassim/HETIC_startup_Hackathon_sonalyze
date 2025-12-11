@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Acoustic Mind – Rate Every Room, Quiet Any Space</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content="Acoustic Mind lets you walk room-to-room with your phone, rate the loudness of each space, and get clear recommendations to make your home calmer."
+  />
+
+  <!-- Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    :root {
+      --bg: #050816;
+      --bg-soft: #070b1f;
+      --bg-elevated: #0d1024;
+      --accent: #6f8cff;
+      --accent-soft: rgba(111, 140, 255, 0.2);
+      --accent-strong: #9f7bff;
+      --text: #f9f9ff;
+      --muted: #a1a7c4;
+      --border-subtle: rgba(255, 255, 255, 0.06);
+      --radius-lg: 18px;
+      --radius-xl: 24px;
+      --shadow-soft: 0 24px 60px rgba(0, 0, 0, 0.65);
+      --max-width: 1120px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      height: 100%;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #141a33 0, #050816 55%, #02030a 100%);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(18px);
+      background: linear-gradient(
+        to bottom,
+        rgba(5, 8, 22, 0.92),
+        rgba(5, 8, 22, 0.75),
+        transparent
+      );
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .nav-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      gap: 16px;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-size: 13px;
+    }
+
+    .nav-logo {
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 20%, #ffffff, #9f7bff 45%, #050816);
+      box-shadow: 0 0 18px rgba(159, 123, 255, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .nav-links a {
+      position: relative;
+      padding-bottom: 2px;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -4px;
+      width: 0;
+      height: 2px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-strong));
+      transition: width 0.18s ease-out;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .badge-beta {
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(159, 123, 255, 0.5);
+      background: rgba(7, 11, 31, 0.85);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent-strong);
+    }
+
+    .main {
+      flex: 1;
+    }
+
+    .hero {
+      max-width: var(--max-width);
+      margin: 32px auto 0;
+      padding: 24px 20px 80px;
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2.5fr);
+      gap: 40px;
+      align-items: center;
+    }
+
+    .hero-pre {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(10, 15, 45, 0.85);
+      border: 1px solid rgba(111, 140, 255, 0.35);
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 14px;
+    }
+
+    .hero-pre-pill {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #35ffb3;
+      box-shadow: 0 0 10px rgba(53, 255, 179, 0.8);
+    }
+
+    .hero-title {
+      font-size: clamp(38px, 4vw, 52px);
+      line-height: 1.05;
+      letter-spacing: -0.035em;
+      margin-bottom: 14px;
+    }
+
+    .hero-title span.highlight {
+      background: linear-gradient(120deg, #6f8cff, #9f7bff, #35ffb3);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 30px rgba(53, 255, 179, 0.35);
+    }
+
+    .hero-subtitle {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--muted);
+      max-width: 480px;
+      margin-bottom: 24px;
+    }
+
+    .hero-cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 11px 18px;
+      border-radius: 999px;
+      font-size: 14px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      outline: none;
+      transition: transform 0.12s ease-out, box-shadow 0.12s ease-out,
+        background 0.12s ease-out, border-color 0.12s ease-out;
+      user-select: none;
+    }
+
+    .btn-primary {
+      background: radial-gradient(circle at 0 0, #9f7bff, #6f8cff 50%, #2434ff);
+      color: var(--text);
+      box-shadow: 0 18px 38px rgba(111, 140, 255, 0.65);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 22px 42px rgba(111, 140, 255, 0.8);
+    }
+
+    .btn-ghost {
+      background: rgba(7, 11, 31, 0.9);
+      border-color: rgba(255, 255, 255, 0.08);
+      color: var(--muted);
+    }
+
+    .btn-ghost:hover {
+      transform: translateY(-1px);
+      border-color: rgba(111, 140, 255, 0.7);
+      background: rgba(7, 11, 31, 1);
+    }
+
+    .hero-footnote {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .hero-footnote strong {
+      color: #e2e4ff;
+      font-weight: 500;
+    }
+
+    /* Right visual: room loudness card */
+    .hero-visual {
+      position: relative;
+    }
+
+    .hero-card {
+      position: relative;
+      border-radius: var(--radius-xl);
+      background: radial-gradient(circle at top, #16193b, #070b1f 58%, #050816);
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-soft);
+      padding: 18px 18px 16px;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .hero-card-gradient {
+      position: absolute;
+      inset: -40%;
+      background:
+        radial-gradient(circle at 0 0, rgba(111, 140, 255, 0.18), transparent 55%),
+        radial-gradient(circle at 100% 0, rgba(159, 123, 255, 0.18), transparent 55%),
+        radial-gradient(circle at 50% 120%, rgba(53, 255, 179, 0.18), transparent 55%);
+      mix-blend-mode: screen;
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .hero-card-header {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      z-index: 1;
+    }
+
+    .hero-card-title {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+    }
+
+    .hero-card-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(3, 200, 132, 0.1);
+      border: 1px solid rgba(3, 200, 132, 0.5);
+      font-size: 11px;
+      color: #8ffad4;
+    }
+
+    .hero-rooms {
+      position: relative;
+      border-radius: var(--radius-lg);
+      padding: 14px;
+      background: rgba(6, 9, 30, 0.9);
+      border: 1px solid rgba(111, 140, 255, 0.35);
+      margin-bottom: 14px;
+      overflow: hidden;
+    }
+
+    .hero-rooms-label {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .hero-room-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .hero-room-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--muted);
+      gap: 10px;
+    }
+
+    .hero-room-name {
+      flex: 0 0 90px;
+    }
+
+    .hero-room-bar-wrap {
+      flex: 1;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.05);
+      overflow: hidden;
+    }
+
+    .hero-room-bar {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #35ffb3, #f6ff8f, #ff8f70);
+      transform-origin: left;
+    }
+
+    .hero-room-score {
+      flex: 0 0 48px;
+      text-align: right;
+    }
+
+    .hero-stats {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 4px;
+      z-index: 1;
+    }
+
+    .hero-stat {
+      padding: 10px 10px 9px;
+      border-radius: 13px;
+      background: rgba(5, 8, 22, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .hero-stat-value {
+      font-size: 15px;
+      font-weight: 600;
+      color: #e8ebff;
+      margin-bottom: 2px;
+    }
+
+    .glow-orbit {
+      position: absolute;
+      inset: -40%;
+      border-radius: 50%;
+      border: 1px dashed rgba(152, 168, 255, 0.2);
+      opacity: 0.8;
+      pointer-events: none;
+    }
+
+    .section {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 20px 72px;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 22px;
+      gap: 24px;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .section-kicker {
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .section-subtitle {
+      font-size: 13px;
+      color: var(--muted);
+      max-width: 360px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      border-radius: var(--radius-lg);
+      background: rgba(7, 11, 31, 0.98);
+      border: 1px solid var(--border-subtle);
+      padding: 16px 15px 15px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background:
+        radial-gradient(circle at 0 0, rgba(159, 123, 255, 0.22), transparent 55%),
+        radial-gradient(circle at 100% 100%, rgba(111, 140, 255, 0.16), transparent 60%);
+      opacity: 0;
+      transition: opacity 0.2s ease-out;
+      pointer-events: none;
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .card-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      margin-bottom: 12px;
+      background: var(--accent-soft);
+      backdrop-filter: blur(10px);
+    }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+
+    .card-body {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.55;
+      margin-bottom: 10px;
+    }
+
+    .card-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: #c1c5ff;
+      background: rgba(8, 12, 40, 0.92);
+      border-radius: 999px;
+      padding: 3px 9px;
+      border: 1px solid rgba(111, 140, 255, 0.4);
+    }
+
+    .card-tag-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #35ffb3;
+    }
+
+    .section-cta {
+      margin-top: 26px;
+      padding: 18px 18px;
+      border-radius: var(--radius-xl);
+      background: radial-gradient(circle at 0 0, rgba(111, 140, 255, 0.2), transparent 60%),
+        radial-gradient(circle at 100% 120%, rgba(53, 255, 179, 0.18), transparent 65%),
+        rgba(5, 8, 22, 0.96);
+      border: 1px solid var(--border-subtle);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .section-cta-text {
+      font-size: 14px;
+      max-width: 520px;
+    }
+
+    .section-cta-text span {
+      color: #e2e4ff;
+      font-weight: 500;
+    }
+
+    .footer {
+      border-top: 1px solid var(--border-subtle);
+      padding: 20px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .footer-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 14px;
+    }
+
+    .dot {
+      width: 3px;
+      height: 3px;
+      border-radius: 999px;
+      background: var(--border-subtle);
+      align-self: center;
+    }
+
+    /* Responsive */
+    @media (max-width: 880px) {
+      .hero {
+        grid-template-columns: minmax(0, 1fr);
+        padding-top: 18px;
+        gap: 30px;
+      }
+
+      .hero-visual {
+        order: -1;
+      }
+
+      .nav-inner {
+        padding-inline: 16px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .nav-links {
+        display: none;
+      }
+
+      .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .grid-3 {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .section-cta {
+        align-items: flex-start;
+      }
+
+      .hero-card {
+        padding: 16px 14px 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="nav">
+      <div class="nav-inner">
+        <a href="#top" class="nav-brand">
+          <span class="nav-logo">A</span>
+          <span>Acoustic Mind</span>
+        </a>
+        <div class="nav-links">
+          <a href="#how">How it works</a>
+          <a href="#fixes">Fixes</a>
+          <a href="#about">About</a>
+          <span class="badge-beta">Home beta</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="main" id="top">
+      <!-- Hero -->
+      <section class="hero">
+        <div>
+          <div class="hero-pre">
+            <span class="hero-pre-pill"></span>
+            Turn home noise into a simple score
+          </div>
+          <h1 class="hero-title">
+            Rate every room.<br />
+            <span class="highlight">Quiet the ones that matter.</span>
+          </h1>
+          <p class="hero-subtitle">
+            Acoustic Mind turns your phone into a room-by-room loudness meter.
+            Walk your home once, see which spaces are stressing you out, and get clear,
+            realistic fixes—no sound-engineering degree required.
+          </p>
+
+          <div class="hero-cta-row">
+            <button onclick="go_home()" class="btn btn-primary">
+              Get early access
+            </button>
+            <button onclick="go_home()" class="btn btn-ghost">
+              See a sample home report
+            </button>
+          </div>
+          <p class="hero-footnote">
+            <strong>Works with your phone mic.</strong> Short scans, no raw audio stored.
+          </p>
+        </div>
+
+        <!-- Right: visual card -->
+        <div class="hero-visual">
+          <div class="hero-card" aria-hidden="true">
+            <div class="hero-card-gradient"></div>
+            <div class="glow-orbit"></div>
+
+            <div class="hero-card-header">
+              <div>
+                <div class="hero-card-title">Home Loudness Map</div>
+              </div>
+              <div class="hero-card-status">
+                <span>●</span>
+                7 rooms scanned
+              </div>
+            </div>
+
+            <div class="hero-rooms">
+              <div class="hero-rooms-label">
+                <span>Room noise score (0–100)</span>
+                <span>Tap to see fixes ↗</span>
+              </div>
+              <div class="hero-room-list">
+                <div class="hero-room-row">
+                  <span class="hero-room-name">Bedroom</span>
+                  <div class="hero-room-bar-wrap">
+                    <div class="hero-room-bar" style="width: 32%;"></div>
+                  </div>
+                  <span class="hero-room-score">32</span>
+                </div>
+                <div class="hero-room-row">
+                  <span class="hero-room-name">Living</span>
+                  <div class="hero-room-bar-wrap">
+                    <div class="hero-room-bar" style="width: 61%;"></div>
+                  </div>
+                  <span class="hero-room-score">61</span>
+                </div>
+                <div class="hero-room-row">
+                  <span class="hero-room-name">Office</span>
+                  <div class="hero-room-bar-wrap">
+                    <div class="hero-room-bar" style="width: 74%;"></div>
+                  </div>
+                  <span class="hero-room-score">74</span>
+                </div>
+                <div class="hero-room-row">
+                  <span class="hero-room-name">Nursery</span>
+                  <div class="hero-room-bar-wrap">
+                    <div class="hero-room-bar" style="width: 85%;"></div>
+                  </div>
+                  <span class="hero-room-score">85</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="hero-stats">
+              <div class="hero-stat">
+                <div class="hero-stat-value">Home 62</div>
+                Noise index
+                <br />
+                <span style="font-size: 10px; color: var(--muted);">“Could be calmer”</span>
+              </div>
+              <div class="hero-stat">
+                <div class="hero-stat-value">3</div>
+                Priority rooms
+                <br />
+                <span style="font-size: 10px; color: var(--muted);">Office, nursery, living</span>
+              </div>
+              <div class="hero-stat">
+                <div class="hero-stat-value">−18 dB</div>
+                Potential drop
+                <br />
+                <span style="font-size: 10px; color: var(--muted);">With suggested fixes</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- How it works -->
+      <section class="section" id="how">
+        <div class="section-header">
+          <div>
+            <div class="section-kicker">How Acoustic Mind works</div>
+            <h2 class="section-title">From quick scan to calmer rooms.</h2>
+          </div>
+          <p class="section-subtitle">
+            We turn a simple walk-through with your phone into a ranked list of loud rooms,
+            plus step-by-step suggestions that actually fit your space and budget.
+          </p>
+        </div>
+
+        <div class="grid-3">
+          <article class="card">
+            <div class="card-icon">📱</div>
+            <h3 class="card-title">1. Walk &amp; listen</h3>
+            <p class="card-body">
+              Start a scan, walk room to room, and let your phone listen for a few seconds in
+              each space. We capture loudness, echoes, and background noise levels.
+            </p>
+            <div class="card-tag">
+              <span class="card-tag-dot"></span>
+              No extra hardware
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-icon">📈</div>
+            <h3 class="card-title">2. Get a room score</h3>
+            <p class="card-body">
+              Each room gets a 0–100 noise score, plus tags like “echo-y”, “street noise”
+              or “thin walls” so you know what’s actually making things loud.
+            </p>
+            <div class="card-tag">
+              <span class="card-tag-dot"></span>
+              Ranked by impact
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-icon">🛠️</div>
+            <h3 class="card-title">3. Fix what matters</h3>
+            <p class="card-body">
+              See specific recommendations—from rugs and curtains to door seals and panels—
+              ordered by cost vs. expected noise drop.
+            </p>
+            <div class="card-tag">
+              <span class="card-tag-dot"></span>
+              Actionable, not theoretical
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- Fix types / recommendations -->
+      <section class="section" id="fixes">
+        <div class="section-header">
+          <div>
+            <div class="section-kicker">Smart recommendations</div>
+            <h2 class="section-title">Fixes matched to your actual room.</h2>
+          </div>
+          <p class="section-subtitle">
+            Acoustic Mind suggests small realistic tweaks first—before telling you to rebuild
+            walls or buy a full studio kit.
+          </p>
+        </div>
+
+        <div class="grid-3">
+          <article class="card">
+            <div class="card-icon">🧶</div>
+            <h3 class="card-title">Soft surfaces first</h3>
+            <p class="card-body">
+              Add rugs, curtains, and soft furniture where they’ll have the biggest effect,
+              based on where echoes and reflections are strongest.
+            </p>
+            <div class="card-tag">
+              <span class="card-tag-dot"></span>
+              “Living room feels softer”
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-icon">🚪</div>
+            <h3 class="card-title">Seal the leaks</h3>
+            <p class="card-body">
+              Identify doors and windows that leak street or hallway noise, and get targeted
+              suggestions like seals, draft stoppers, and heavier curtains.
+            </p>
+            <div class="card-tag">
+              <span class="card-tag-dot"></span>
+              Great for bedrooms &amp; nurseries
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-icon">🎧</div>
+            <h3 class="card-title">When you need pro-level</h3>
+            <p class="card-body">
+              For home studios and offices, we’ll flag where panels, bass traps, or white-noise
+              can help—and show the expected difference before you spend.
+            </p>
+            <div class="card-tag">
+              <span class="card-tag-dot"></span>
+              Creator &amp; WFH friendly
+            </div>
+          </article>
+        </div>
+
+        <div class="section-cta">
+          <p class="section-cta-text">
+            <span>Acoustic Mind is in early beta for apartments and small homes.</span>
+            We’re looking for people with loud streets, paper-thin walls, kids, pets—or all of the above.
+          </p>
+          <button onclick="go_home()" class="btn btn-primary">
+            Join the home beta list
+          </button>
+        </div>
+      </section>
+
+      <!-- About -->
+      <section class="section" id="about">
+        <div class="section-header">
+          <div>
+            <div class="section-kicker">Our goal</div>
+            <h2 class="section-title">Make quiet a feature, not a luxury.</h2>
+          </div>
+          <p class="section-subtitle">
+            Acoustic Mind is building a simple way to understand and improve the sound of your home,
+            starting with the phone you already have and fixes you can actually do.
+          </p>
+        </div>
+
+        <div class="grid-3">
+          <article class="card">
+            <div class="card-icon">🛡️</div>
+            <h3 class="card-title">Privacy-aware</h3>
+            <p class="card-body">
+              We care about noise, not content. Scans focus on loudness and echo, not on what
+              you say. Raw audio never becomes “searchable recordings.”
+            </p>
+          </article>
+          <article class="card">
+            <div class="card-icon">🏠</div>
+            <h3 class="card-title">Built for real homes</h3>
+            <p class="card-body">
+              Apartments, roommates, kids, pets—we’re designing for life, not perfect studios.
+              Recommendations assume you can’t rebuild your walls tomorrow.
+            </p>
+          </article>
+          <article class="card">
+            <div class="card-icon">✨</div>
+            <h3 class="card-title">Tiny upgrades, big feels</h3>
+            <p class="card-body">
+              Our north star is simple: your bedroom feels calmer, your office feels more focused,
+              and your home stops sounding like an echo chamber.
+            </p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        <span>© <span id="year"></span> Acoustic Mind, Inc.</span>
+        <div class="footer-links">
+          <a href="#top">Back to top</a>
+          <span class="dot"></span>
+          <span>Measure, then muffle.</span>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Tiny enhancement: current year, no framework needed -->
+  <script>
+    (function () {
+      var y = new Date().getFullYear();
+      var el = document.getElementById("year");
+      if (el) el.textContent = y;
+    })();
+
+    function go_home(){
+        // Go to another page
+window.location.href = "{{ url_for('index') }}";
+    }
+  </script>
+</body>
+</html>

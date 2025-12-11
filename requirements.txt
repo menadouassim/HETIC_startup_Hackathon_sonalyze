@@ -1,3 +1,13 @@
 groq
 python-dotenv
 streamlit
+numpy
+matplotlib
+scipy
+networkx
+flask
+flask-cors
+reportlab
+pillow
+pandas
+cookiecutter

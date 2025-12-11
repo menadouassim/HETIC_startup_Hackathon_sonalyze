@@ -2,7 +2,7 @@ import json
 import random
 from datetime import datetime, timedelta
 
-OUTPUT_FILE = "random_noise_data.json"
+OUTPUT_FILE = "test_data_n5.json"
 START_TIME = datetime(2025, 12, 5, 0, 0, 0)
 INTERVAL = timedelta(minutes=2)
 TOTAL_ENTRIES = 24 * 60 // 2  # 720 records
@@ -41,19 +41,21 @@ def generate_record(timestamp):
     }
 
 
-def main():
+
+def generate_random_records(output_path, start_time, total_entries, interval):
     data = []
-    current_time = START_TIME
+    current_time = start_time
 
-    for _ in range(TOTAL_ENTRIES):
+    for _ in range(total_entries):
         data.append(generate_record(current_time))
-        current_time += INTERVAL
+        current_time += interval
 
-    with open(OUTPUT_FILE, "w") as f:
+    with open(output_path, "w") as f:
         json.dump(data, f, indent=4)
 
-    print(f"✅ Generated {TOTAL_ENTRIES} records in {OUTPUT_FILE}")
+    return {
+        "message": "Random data generated",
+        "records": len(data),
+        "output_file": output_path
+    }
 
-
-if __name__ == "__main__":
-    main()

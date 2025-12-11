@@ -1,0 +1,171 @@
+
+    :root {
+      --toolbar-w: 260px;
+      --bg: #f7f8fb;
+      --panel: #f0f2f6;
+      --accent: #3b82f6;
+      --muted: #6b7280;
+      --room-bg: #dbeafe;
+      --room-border: #2563eb;
+    }
+    html,body { height:100%; margin:0; font-family: Inter, Roboto, Arial, sans-serif; background: var(--bg); }
+    .app {
+      display:flex; height:100vh; gap:12px; padding:12px;
+    }
+
+    /* toolbar */
+    .toolbar {
+      width: var(--toolbar-w);
+      background:var(--panel);
+      border-radius:8px;
+      padding:12px;
+      box-shadow: 0 6px 18px rgba(16,24,40,0.06);
+      display:flex; flex-direction:column; gap:10px;
+    }
+    .toolbar h3 { margin:0; font-size:16px; }
+    .room-btn {
+      display:flex; justify-content:space-between; align-items:center;
+      padding:8px; border-radius:6px; background: white; cursor:pointer;
+      border:1px solid rgba(0,0,0,0.06);
+    }
+    .controls { display:flex; gap:8px; margin-top:6px; }
+    button { padding:8px 10px; border-radius:6px; border: none; cursor:pointer; background:var(--accent); color:white; }
+    button.secondary { background:transparent; color:var(--muted); border:1px solid rgba(0,0,0,0.06); }
+    .small { padding:6px 8px; font-size:13px; }
+
+    /* canvas */
+    .canvas-wrap {
+      flex:1; position:relative; display:flex; flex-direction:column;
+    }
+    .canvas {
+      flex:1; background:linear-gradient(180deg, rgba(0,0,0,0.01) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.01) 1px, transparent 1px);
+      background-size: 20px 20px;
+      border-radius:8px; margin:0; padding:12px; position:relative; overflow:auto;
+      box-shadow: 0 6px 18px rgba(16,24,40,0.03);
+    }
+
+    /* room */
+    .room {
+      position:absolute;
+      background: var(--room-bg);
+      border: 4px solid var(--room-border);
+      border-radius:16px;
+      box-sizing:border-box;
+      user-select:none;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      padding:6px;
+      gap:6px;
+      min-width:40px;
+      min-height:30px;
+      transition: box-shadow 0.08s;
+    }
+    .room .title { font-weight:600; font-size:13px; pointer-events:none; color:#0f172a; }
+    .room .meta { font-size:11px; color:var(--muted); pointer-events:none; }
+
+    .room.dragging { box-shadow: 0 10px 30px rgba(16,24,40,0.12); opacity:0.98; }
+    .room.locked { cursor:not-allowed; opacity:0.8; }
+
+    /* resize handles */
+    .resize-handle {
+      width:12px; height:12px; background:var(--room-border); position:absolute; border-radius:22px;
+    }
+    .resize-tl { top:-6px; left:-6px; cursor:nwse-resize; }
+    .resize-tr { top:-6px; right:-6px; cursor:nesw-resize; }
+    .resize-bl { bottom:-6px; left:-6px; cursor:nesw-resize; }
+    .resize-br { bottom:-6px; right:-6px; cursor:nwse-resize; }
+
+    /* small footer */
+    .footer { display:flex; gap:8px; align-items:center; justify-content:flex-end; padding-top:8px; }
+    .file-input { font-size:12px; }
+
+
+    .delete-btn {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 18px;
+    height: 18px;
+    background: #5a5a5a;
+    color: white;
+    font-size: 12px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: 0 0 4px rgba(0,0,0,0.4);
+    opacity: 0;
+    transition: opacity 0.15s;
+}
+
+.room:hover .delete-btn {
+    opacity: 1;
+}
+
+
+
+
+.edit-btn {
+    
+    padding: 4px 8px;
+    background: #4a74c9;
+    color: white;
+    font-size: 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: 0 0 4px rgba(0,0,0,0.3);
+    opacity: 0;
+    transition: opacity 0.15s;
+}
+
+.room:hover .edit-btn {
+    opacity: 1;
+}
+
+
+
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.45);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: white;
+    padding: 20px;
+    min-width: 300px;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.25);
+    position: relative;
+}
+
+.modal .close {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    cursor: pointer;
+    font-size: 22px;
+}
+
+
+
+
+.room svg {
+  width: 100%;
+  height: 20%;
+  display: block;
+  object-fit: contain;
+  pointer-events: none;
+  z-index: 2;
+}
