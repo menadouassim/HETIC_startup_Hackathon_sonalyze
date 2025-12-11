@@ -16,12 +16,12 @@ Make sure you have **Python 3.9+** installed.
 ```bash
 pip install -r requirements.txt
 
-
+```
 2. **Run the application**
 
 ```bash
 python run.py
-
+```
 This will start the local tool/app that powers Acoustic Mind’s noise-rating workflow.
 
 ---
@@ -41,6 +41,7 @@ Each room should be represented in a JSON file with the info the app expects. Fo
   ....
   "notes": "Faces street, echo-y"
 }
+```
 ---
 2. **Drop JSON files into each room**
 
