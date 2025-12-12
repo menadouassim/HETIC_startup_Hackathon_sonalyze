@@ -47,6 +47,7 @@ Each room should be represented in a JSON file with the info the app expects. Fo
 
 The ai agent will read each JSON file in the rooms and analyze them.
 ---
+
 3. **Hit Save and run**
 
 After you’ve:
@@ -65,7 +66,4 @@ Output a report
 
 
 ---
-
-
-
-## the results of all action performed are in the exports folder !!!##
+4.**## the results of all action performed are in the exports folder !!!**
