@@ -66,4 +66,6 @@ Output a report
 
 
 ---
-## 4.the results of all action performed are in the exports folder !!!
+## 4.the results of all actions performed are in the exports folder !!!
+
+you can view the results and progress of the ai agent in the terminal and follow it along as it works it magic
