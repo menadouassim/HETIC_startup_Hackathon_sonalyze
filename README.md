@@ -62,3 +62,5 @@ Load your room layout from the JSON files
 Use/collect loudness data for each room
 Generate recommendations for fixes
 Output a report 
+
+## the results of all action performed are in the exports folder !!!##
